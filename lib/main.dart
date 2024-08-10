@@ -1,82 +1,76 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+void main() => runApp(const SpacedItemsList());
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class SpacedItemsList extends StatelessWidget {
+  const SpacedItemsList({super.key});
 
   @override
   Widget build(BuildContext context) {
-    const String appTitle = 'Flutter layout demo';
+    const items = 10;
 
     return MaterialApp(
-      title: appTitle,
+      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        cardTheme: CardTheme(color: Colors.amber.shade500),
+        useMaterial3: true,
+      ),
       home: Scaffold(
-          appBar: AppBar(
-            title: const Text(appTitle),
-          ),
-          // #docregion add-widget
-          body: ListView.builder(
-            itemCount: items.length,
-            itemBuilder: (context, index) {
-              final item = items[index];
-
-              return ListTile(
-                title: item.buildTitle(context),
-                subtitle: item.buildSubtitle(context),
-              );
-            },
-          )),
+        body: LayoutBuilder(builder: (context, constraints) {
+          return SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: List.generate(
+                    items, (index) => ItemWidget(text: 'Item $index')),
+              ),
+            ),
+          );
+        }),
+      ),
     );
   }
 }
 
-/// The base class for the different types of items the list can contain.
-abstract class ListItem {
-  /// The title line to show in a list item.
-  Widget buildTitle(BuildContext context);
+class ItemWidget extends StatelessWidget {
+  const ItemWidget({
+    super.key,
+    required this.text,
+  });
 
-  /// The subtitle line, if any, to show in a list item.
-  Widget buildSubtitle(BuildContext context);
-}
-
-/// A ListItem that contains data to display a heading.
-class HeadingItem implements ListItem {
-  final String heading;
-
-  HeadingItem(this.heading);
+  final String text;
 
   @override
-  Widget buildTitle(BuildContext context) {
-    return Text(
-      heading,
-      style: Theme.of(context).textTheme.headlineSmall,
+  Widget build(BuildContext context) {
+    return Card(
+      child: SizedBox(
+        height: 100,
+        child: Center(child: Text(text)),
+      ),
     );
   }
-
-  @override
-  Widget buildSubtitle(BuildContext context) => const SizedBox.shrink();
 }
 
-/// A ListItem that contains data to display a message.
-class MessageItem implements ListItem {
-  final String sender;
-  final String body;
-
-  MessageItem(this.sender, this.body);
-
-  @override
-  Widget buildTitle(BuildContext context) => Text(sender);
-
-  @override
-  Widget buildSubtitle(BuildContext context) => Text(body);
-}
-
-final items = List<ListItem>.generate(
-  1000,
-  (i) => i % 6 == 0
-      ? HeadingItem('Heading $i')
-      : MessageItem('Sender $i', 'Message body $i'),
-);
+// LayoutBuilder(Builder: (context, constraints) {
+//   return SingleChildScrollView(
+//     child: ConstrainedBox(
+//       constraints: BoxConstraints(minHeight: constraints.maxHeight),
+//       child: Column(
+//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//         children: [
+//           ItemWidget(text: 'Item 1'),
+//           Spacer(),
+//           ItemWidget(text: 'Item 2'),
+//           Expanded(
+//             child: ItemWidget(text: 'Item 3'),
+//           )
+          
+//         ],
+//       ),
+//     ),
+//   );
+// });
