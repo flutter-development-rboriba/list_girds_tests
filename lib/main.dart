@@ -19,18 +19,27 @@ class MyApp extends StatelessWidget {
         ),
         // #docregion add-widget
         body: ListView(
-          children: const <Widget>[
-            ListTile(
-              leading: Icon(Icons.map),
-              title: Text('Map'),
+          scrollDirection: Axis.horizontal,
+          children: <Widget>[
+            Container(
+              width: 160,
+              color: Colors.red,
             ),
-            ListTile(
-              leading: Icon(Icons.photo_album),
-              title: Text('Album'),
+            Container(
+              width: 160,
+              color: Colors.blue,
             ),
-            ListTile(
-              leading: Icon(Icons.phone),
-              title: Text('Phone'),
+            Container(
+              width: 160,
+              color: Colors.green,
+            ),
+            Container(
+              width: 160,
+              color: Colors.yellow,
+            ),
+            Container(
+              width: 160,
+              color: Colors.orange,
             ),
           ],
         ),
